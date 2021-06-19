@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<mapper namespace="com.nirvana.mapper.ArticleMapper">-->
+<!--    <select id="findAll" resultType="article">-->
+<!--        select * from article;-->
+<!--    </select>-->
+<!--</mapper>-->
+<mapper namespace="com.nirvana.mapper.ArticleMapper">
+    <resultMap id="articleMap" type="article">
+        <id column="article_id" property="articleId"></id>
+        <result column="article_user_id" property="articleUserId"></result>
+        <result column="article_title" property="articleTitle"></result>
+        <result column="article_content" property="articleContent"></result>
+        <result column="article_comment_count" property="articleCommentCount"></result>
+        <result column="article_like_count" property="articleLikeCount"></result>
+        <result column="article_create_time" property="articleCreateTime"></result>
+        <result column="article_random_pic" property="articleRandomPic"></result>
+        <result column="article_type" property="articleType"></result>
+        <result column="article_summary" property="articleSummary"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="articleMap">
+        select * from article
+/*不要多写一个分号*/
+    </select>
+
+
+    <select id="findArticleCount"  parameterType="int" resultType="int">
+        select count(article_id) from article where article_user_id = #{article_user_id}
+    </select>
+
+    <select id="findAllArticlesByUserId" parameterType="int" resultMap="articleMap">
+        select * from article where article_user_Id = #{article_user_Id}
+    </select>
+
+    <select id="findArticleById" parameterType="int" resultType="article">
+        select * from article where article_id = #{article_id}
+    </select>
+
+    <insert id="addArticle" parameterType="article">
+        insert  into article values (null,#{articleUserId},#{articleTitle},#{articleContent},#{articleCommentCount},#{articleLikeCount},#{articleCreateTime},#{articleRandomPic},#{articleType},#{articleSummary})
+    </insert>
+
+    <select id="findArticleByType" parameterType="int" resultMap="articleMap">
+        select * from article where article_type = #{articleType}
+    </select>
+    <delete id="deleteArticleById" parameterType="int">
+        delete from article where article_id = #{articleId}
+    </delete>
+</mapper>

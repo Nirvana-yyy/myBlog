@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nirvana.mapper.CommentMapper">
+<resultMap id="commentNodeMap" type="commentNode">
+    <id column="comment_id" property="commentId"></id>
+    <id column="comment_time" property="commentTime"></id>
+<!--    <id column="comment_user_id" property="commentUserId"></id>-->
+    <id column="comment_blog_id" property="commentBlogId"></id>
+    <id column="comment_last_id" property="commentLastId"></id>
+    <id column="comment_content" property="commentContent"></id>
+    <id column="comment_user_id" property="commentUserId"></id>
+    <association property="user" javaType="user">
+        <id column="user_id" property="userId"></id>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+        <result column="user_nickname" property="userNickname"></result>
+        <result column="user_avatar" property="userAvatar"></result>
+        <result column="user_last_time" property="userLastTime"></result>
+    </association>
+</resultMap>
+    <select id="queryFirstCommentList" resultMap="commentNodeMap">
+        SELECT * FROM COMMENT c LEFT JOIN USER u ON c.comment_user_id=u.user_id WHERE c.comment_blog_id=#{commentBlogId} and c.comment_last_id is null
+    </select>
+
+    <select id="querySecondCommentList" resultMap="commentNodeMap">
+        SELECT * FROM COMMENT c LEFT JOIN USER u ON c.comment_user_id=u.user_id WHERE c.comment_blog_id=#{commentBlogId} and c.comment_last_id is not null
+    </select>
+    
+    <select id="selectByPrimaryKey" resultType="comment">
+        select * from comment where comment_id = #{comment_id}
+    </select>
+
+    <insert id="insertComment" parameterType="comment">
+        insert into comment values (null,#{commentTime},#{commentUserId},#{commentBlogId},null,#{commentContent})
+    </insert>
+
+
+    <select id="selectAll" resultType="comment">
+        select * from comment order by comment_time desc ,comment_id desc
+    </select>
+</mapper>
